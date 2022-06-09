@@ -1,0 +1,10 @@
+﻿(Calles Anchas) (Calles Largas) : [Texto]
+
+
+[143] [0] : Vértice con solo 2 conexiones.
+[143] [11] : Vértice con solo 2 conexiones.
+[0] [0] : Vértice con solo 2 conexiones.
+[0] [11] : Vértice con solo 2 conexiones.
+[45 - 96] [2 - 5] : No hay conexión en los vértices que se encuentran dentro de este rango.
+[0 - 17] [ 3 - 11] : No hay conexión en los vértices, ya que este rango no ha sido incluido en el mapa seleccionado.
+[17 - 28] [6 – 11] : No hay conexión en los vértices ya que no se ha seleccionado este rango en el mapa.
