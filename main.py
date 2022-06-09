@@ -54,3 +54,30 @@ def get_value_longitud_segun_coordenada(coord_1):
         return c * r
 
     return haversine(40.831556, 73.94296, coord_1[0], coord_1[1])
+
+
+# Actividades de implementación de algoritmo de cálculo de peso de arista en función
+# de su longitud y factor de tráfico calculado.
+def get_peso_arista_segun_trafico(x, y, hora):
+    longitud = get_value_longitud_segun_coordenada(get_value_cordenada(x, y))
+    trafico = get_value_trafico_actual(hora)
+    return trafico * longitud
+
+
+# Actividades de implementación de algoritmos para actualizar pesos de aristas en
+# función a la hora del día.
+def update_peso_arista_segun_trafico(x, y, hora):
+    matrix[x,y] = get_peso_arista_segun_trafico(x,y, hora)
+
+
+#Ejemplos
+'''
+ update_peso_arista_segun_trafico(1, 2, 12)
+print(matrix[1,2])
+
+update_peso_arista_segun_trafico(1, 2, 5)
+print(matrix[1, 2])
+
+update_peso_arista_segun_trafico(1, 2, 24)
+print(matrix[1,2])
+'''
