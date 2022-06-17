@@ -5,8 +5,11 @@ import heapq as hq
 matrix = np.ones([12, 144])
 hora = 0
 
+
+
 def removeEdgeMatrix(firstVertice, secondVertice):
     matrix[firstVertice][secondVertice] = 0
+
 
 for i in range(18):
     for x in range(4, 12):
@@ -26,11 +29,13 @@ for i in range(133, 144):
 ##Save Matrix
 ##np.savetxt('matrix.txt', matrix, fmt="%i", delimiter=",")
 
+
 # Algoritmo para calcular coordenada segun una arista
 def get_value_cordenada(x, y):
     lat = round(40.831556 - (x * 0.011111 / 2), 6)
     lon = round(73.942969 - (y * 0.011111 / 2), 6)
     return lat, lon
+
 
 # Obtener el trafico actual segun la hora
 def get_value_trafico_actual(x, y):
@@ -363,6 +368,41 @@ def get_value_trafico_actual(x, y):
             return 5.7
         else:
             return 1
+
+
+# Actividades de implementación de algoritmo de cálculo de peso de arista en función
+# de su longitud y factor de tráfico calculado.
+def get_peso_arista_segun_trafico(x, y):
+    trafico = get_value_trafico_actual(x, y)
+    if trafico == None:
+        return 0
+    return trafico
+
+
+# Obtener el longitud segun coordenadas
+def get_value_longitud_trafico_segun_coordenadas(coord_1,coord_2):
+    def haversine(lon1, lat1, lon2, lat2):
+        lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+
+        dlon = lon2 - lon1
+        dlat = lat2 - lat1
+        a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
+        c = 2 * asin(sqrt(a))
+        r = 6371
+        return c * r
+
+    return  round(haversine(coord_1[0], coord_1[1], coord_2[0], coord_2[1]),6)
+
+def get_longitud_entre_aristas(x,y,x1,y1):
+    return  round(get_value_longitud_trafico_segun_coordenadas(get_value_cordenada(x,y), get_value_cordenada(x1,y1)) * get_peso_arista_segun_trafico(x, y),6)
+
+
+# Actividades de implementación de algoritmos para actualizar pesos de aristas en
+# función a la hora del día.
+def update_peso_arista_segun_trafico(hora, nuevo):
+    hora = nuevo
+
+
 #a. Actividades de implementación de algoritmos para calcular la ruta más corta y 2 rutas
 #alternativas
 
@@ -412,32 +452,111 @@ def dijkstra(x1,y1,x2,y2, type):
                 set_append_segun_peso_alterna_2(queue, x, y)
             if x == x2 and y == y2:
                 break
-# Actividades de implementación de algoritmo de cálculo de peso de arista en función
-# de su longitud y factor de tráfico calculado.
-def get_peso_arista_segun_trafico(x, y):
-    trafico = get_value_trafico_actual(x, y)
-    if trafico == None:
-        return 0
-    return trafico
 
-# Obtener el longitud segun coordenadas
-def get_value_longitud_trafico_segun_coordenadas(coord_1,coord_2):
-    def haversine(lon1, lat1, lon2, lat2):
-        lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
 
-        dlon = lon2 - lon1
-        dlat = lat2 - lat1
-        a = sin(dlat / 2) * 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) * 2
-        c = 2 * asin(sqrt(a))
-        r = 6371
-        return c * r
+#ordernar segun sus pesos en el queue
+def set_append_segun_peso_corto(queue, x,y):
+    lista = []
+    if 12 > x >= 0 and 144 > y - 1 >= 0:
+        lista.append([x, y - 1, get_longitud_entre_aristas(x,y,x,y-1)])
 
-    return  round(haversine(coord_1[0], coord_1[1], coord_2[0], coord_2[1]),6)
+    if 12 > x + 1 >= 0 and 144 > y >= 0:
+        lista.append([x + 1, y, get_longitud_entre_aristas(x,y,x + 1,y)])
 
-def get_longitud_entre_aristas(x,y,x1,y1):
-    return  round(get_value_longitud_trafico_segun_coordenadas(get_value_cordenada(x,y), get_value_cordenada(x1,y1)) * get_peso_arista_segun_trafico(x, y),6)
+    if 12 > x >= 0 and 144 > y + 1 >= 0:
+        lista.append([x, y + 1, get_longitud_entre_aristas(x,y,x, y + 1)])
 
-# Actividades de implementación de algoritmos para actualizar pesos de aristas en
-# función a la hora del día.
-def update_peso_arista_segun_trafico(hora, nuevo):
-    hora = nuevo
+    if 12 > x - 1 >= 0 and 144 > y >= 0:
+        lista.append([x - 1, y, get_longitud_entre_aristas(x,y,x - 1, y)])
+
+
+    while len(lista) > 0:
+        menor = lista[0]
+        for x in range(len(lista)):
+            if menor[2] < lista[x][2]:
+                menor = lista[x]
+        queue.append([menor[0],menor[1]])
+        lista.remove(menor)
+
+
+#alterna 1
+def set_append_segun_peso_alterna_1(queue, x,y):
+    lista = []
+    if 12 > x >= 0 and 144 > y - 1 >= 0:
+        lista.append([x, y - 1, get_longitud_entre_aristas(x,y,x,y-1)])
+
+    if 12 > x + 1 >= 0 and 144 > y >= 0:
+        lista.append([x + 1, y, get_longitud_entre_aristas(x,y,x + 1,y)])
+
+    if 12 > x >= 0 and 144 > y + 1 >= 0:
+        lista.append([x, y + 1, get_longitud_entre_aristas(x,y,x, y + 1)])
+
+    if 12 > x - 1 >= 0 and 144 > y >= 0:
+        lista.append([x - 1, y, get_longitud_entre_aristas(x,y,x - 1, y)])
+
+
+    while len(lista) > 0:
+        mayor = lista[0]
+        for x in range(len(lista)):
+            if mayor[2] > lista[x][2]:
+                mayor = lista[x]
+        queue.append([mayor[0],mayor[1]])
+        lista.remove(mayor)
+
+
+#alterna 2
+def set_append_segun_peso_alterna_2(queue, x,y):
+    if 12 > x - 1 >= 0 and 144 > y >= 0:
+        hq.heappush(queue,[x - 1, y])
+    if 12 > x + 1 >= 0 and 144 > y >= 0:
+        hq.heappush(queue,[x + 1, y])
+    if 12 > x >= 0 and 144 > y - 1 >= 0:
+        hq.heappush(queue,[x, y - 1])
+    if 12 > x >= 0 and 144 > y + 1 >= 0:
+        hq.heappush(queue,[x, y + 1])
+
+
+# Ejemplos
+
+#print(get_longitud_entre_aristas(0,0,1,0))
+#print(get_longitud_entre_aristas(1,0,0,0))
+
+'''
+hora = 8
+
+#Camino mas corto
+dijkstra(1,44,8,73,"corto")
+
+#Camnio Alterno 1
+dijkstra(1,44,8,73,"alterna1")
+
+#Camino Alterno 2
+dijkstra(1,44,8,73,"alterna2")
+'''
+
+#Cambio de hora 4
+hora = 4
+
+#Camino mas corto
+dijkstra(1,20,10,142,"corto")
+
+#Camnio Alterno 1
+dijkstra(1,20,10,142,"alterna1")
+
+#Camino Alterno 2
+dijkstra(1,20,10,142,"alterna2")
+
+print("-------------- OTRA HORA --------")
+
+
+#Cambio de hora 4
+hora = 23
+
+#Camino mas corto
+dijkstra(1,20,10,142,"corto")
+
+#Camnio Alterno 1
+dijkstra(1,20,10,142,"alterna1")
+
+#Camino Alterno 2
+dijkstra(1,20,10,142,"alterna2")
