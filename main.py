@@ -363,9 +363,55 @@ def get_value_trafico_actual(x, y):
             return 5.7
         else:
             return 1
+#a. Actividades de implementación de algoritmos para calcular la ruta más corta y 2 rutas
+#alternativas
 
-# Actividades de implementación de algoritmo de cálculo de peso de arista en función
-# de su longitud y factor de tráfico calculado.
+#Rutas Mas Corta
+def dijkstra(x1,y1,x2,y2, type):
+    queue = []
+
+    queue.append([x1, y1])
+
+    fatherX = np.zeros([12, 144])
+    fatherY = np.zeros([12, 144])
+
+    visited = np.zeros([12, 144])
+    peso = np.zeros([12, 144])
+
+    xFather = x1
+    yFather = y1
+
+    while queue:
+
+        [x,y] = queue[len(queue)-1]
+        queue.remove([x,y])
+
+        if visited[x,y] == 0 and matrix[x][y] == 1 and  x1 <= x <= x2 and y1 <= y <=y2:
+            visited[x,y] = 1
+
+            peso[x,y] = peso[xFather, yFather] + get_longitud_entre_aristas(x,y,xFather,yFather)
+            print(" ")
+            print("------")
+            print("x,y:",x,y)
+            print("Padre: ",xFather,yFather)
+            print("peso acomulado: ", peso[x, y])
+            print("longitud(x,y): ", get_longitud_entre_aristas(x, y, xFather, yFather))
+            print("------")
+            print(" ")
+
+            fatherX[x,y] = xFather
+            fatherY[x,y] = yFather
+
+            xFather = x
+            yFather = y
+            if type == "corto":
+                set_append_segun_peso_corto(queue, x, y)
+            elif type == "alterna1":
+                set_append_segun_peso_alterna_1(queue,x , y)
+            elif type == "alterna2":
+                set_append_segun_peso_alterna_2(queue, x, y)
+            if x == x2 and y == y2:
+                break
 def get_peso_arista_segun_trafico(x, y):
     trafico = get_value_trafico_actual(x, y)
     if trafico == None:
