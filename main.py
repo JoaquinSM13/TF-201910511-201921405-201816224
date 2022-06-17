@@ -412,6 +412,8 @@ def dijkstra(x1,y1,x2,y2, type):
                 set_append_segun_peso_alterna_2(queue, x, y)
             if x == x2 and y == y2:
                 break
+# Actividades de implementación de algoritmo de cálculo de peso de arista en función
+# de su longitud y factor de tráfico calculado.
 def get_peso_arista_segun_trafico(x, y):
     trafico = get_value_trafico_actual(x, y)
     if trafico == None:
