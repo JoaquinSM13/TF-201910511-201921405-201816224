@@ -1,10 +1,15 @@
+import math
 from math import radians, sin, asin, sqrt, cos
 import numpy as np
 import heapq as hq
+from random import randint
 
 matrix = np.ones([12, 144])
+matrixToList = np.ones([12, 144])
+listToMatrix = []
 hora = 0
 
+lista = []
 
 
 def removeEdgeMatrix(firstVertice, secondVertice):
@@ -26,361 +31,114 @@ for i in range(45, 97):
 for i in range(133, 144):
     removeEdgeMatrix(6, i)
 
-##Save Matrix
-##np.savetxt('matrix.txt', matrix, fmt="%i", delimiter=",")
+sumaTotal = [0, 0]
+verifiedY = 0
 
 
-# Algoritmo para calcular coordenada segun una arista
 def get_value_cordenada(x, y):
-    lat = round(40.831556 - (x * 0.011111 / 2), 6)
-    lon = round(73.942969 - (y * 0.011111 / 2), 6)
-    return lat, lon
+    if sumaTotal[0] == 0 and sumaTotal[1] == 0:
+        sumaTotal[0] = 40.831556
+        sumaTotal[1] = -73.942969
+    else:
+        if x == 0:
+            sumaTotal[0] = 40.831556
+            sumaTotal[1] = -73.942969 - (0.000300 * y)
+        else:
+            sumaTotal[0] = round(sumaTotal[0] - (1 * 0.0001111111 / 2), 6)
+            sumaTotal[1] = round(sumaTotal[1], 6)
+    return sumaTotal
 
 
-# Obtener el trafico actual segun la hora
-def get_value_trafico_actual(x, y):
-    if 1 <= hora <= 5:
-        if 1 <= hora <= 5:
-            # x = 0 , 3
-            if 1 <= x <= 2 and 5 <= y <= 20:
-                return 3.1
-            elif 2 <= x <= 3 and 21 <= y <= 35:
-                return 2.2
-            elif 0 <= x <= 3 and 36 <= y <= 45:
-                return 1.9
-            elif 1 <= x <= 2 and 46 <= y <= 70:
-                return 2.4
-            elif 0 <= x <= 2 and 71 <= y <= 96:
-                return 3.1
-            elif 0 <= x <= 1 and 97 <= y <= 108:
-                return 2
-            elif 2 <= x <= 3 and 97 <= y <= 108:
-                return 4.1
-            elif 0 <= x <= 1 and 109 <= y <= 125:
-                return 1.2
-            elif 2 <= x <= 3 and 109 <= y <= 125:
-                return 0.8
-            elif 0 <= x <= 1 and 126 <= y <= 134:
-                return 1.7
-            elif 2 <= x <= 3 and 126 <= y <= 134:
-                return 2.5
-            elif 0 <= x <= 3 and 134 <= y <= 143:
-                return 3.2
-            # 4-7
-            elif 4 <= x <= 6 and 18 <= y <= 26:
-                return 1.2
-            elif 4 <= x <= 5 and 27 <= y <= 34:
-                return 2.3
-            elif 4 <= x <= 5 and 35 <= y <= 45:
-                return 1.6
-            elif 6 <= x <= 7 and 35 <= y <= 45:
-                return 2.5
-            elif 5 <= x <= 6 and 46 <= y <= 70:
-                return 1.6
-            elif 6 <= x <= 7 and 71 <= y <= 96:
-                return 2.7
-            elif 4 <= x <= 5 and 97 <= y <= 107:
-                return 3.1
-            elif 6 <= x <= 7 and 97 <= y <= 107:
-                return 1.6
-            elif 4 <= x <= 5 and 108 <= y <= 118:
-                return 3
-            elif 6 <= x <= 7 and 108 <= y <= 118:
-                return 1.1
-            elif 4 <= x <= 5 and 119 <= y <= 128:
-                return 0.7
-            elif 6 <= x <= 7 and 119 <= y <= 128:
-                return 0.4
-            elif 4 <= x <= 6 and 129 <= y <= 134:
-                return 1.7
-            elif 5 <= x <= 7 and 135 <= y <= 143:
-                return 0.9
-                # 8- 11
-            elif 8 <= x <= 9 and 28 <= y <= 41:
-                return 0.1
-            elif 10 <= x <= 11 and 28 <= y <= 41:
-                return 0.6
-            elif 9 <= x <= 10 and 42 <= y <= 51:
-                return 0.9
-            elif 10 <= x <= 11 and 52 <= y <= 64:
-                return 1.6
-            elif 8 <= x <= 9 and 65 <= y <= 78:
-                return 2.1
-            elif 8 <= x <= 11 and 79 <= y <= 92:
-                return 1.1
-            elif 8 <= x <= 9 and 93 <= y <= 109:
-                return 3.2
-            elif 10 <= x <= 11 and 93 <= y <= 109:
-                return 0.4
-            elif 9 <= x <= 10 and 110 <= y <= 120:
-                return 1.3
-            elif 10 <= x <= 11 and 121 <= y <= 132:
-                return 2.3
-            elif 8 <= x <= 9 and 133 <= y <= 140:
-                return 3.6
-            elif 8 <= x <= 11 and 141 <= y <= 143:
-                return 1.6
+def transformToList():
+    n = len(matrix) * len(matrix[0])
+    sublist = []
+    list = []
+    posX = -1
+    posY = 0
+
+    for x in range(n):
+        if posY < 144:
+            if posX == 11:
+                posY += 1
+                posX = 0
             else:
-                return 1
-    elif 6 <= hora <= 12:
-        # x = 0 , 3
-        if 1 <= x <= 2 and 5 <= y <= 20:
-            return 2.4
-        elif 2 <= x <= 3 and 21 <= y <= 35:
-            return 1.7
-        elif 0 <= x <= 3 and 36 <= y <= 45:
-            return 0.5
-        elif 1 <= x <= 2 and 46 <= y <= 70:
-            return 2.6
-        elif 0 <= x <= 2 and 71 <= y <= 96:
-            return 1.3
-        elif 0 <= x <= 1 and 97 <= y <= 108:
-            return 1.7
-        elif 2 <= x <= 3 and 97 <= y <= 108:
-            return 0.3
-        elif 0 <= x <= 1 and 109 <= y <= 125:
-            return 0.7
-        elif 2 <= x <= 3 and 109 <= y <= 125:
-            return 2.1
-        elif 0 <= x <= 1 and 126 <= y <= 134:
-            return 3.1
-        elif 2 <= x <= 3 and 126 <= y <= 134:
-            return 0.6
-        elif 0 <= x <= 3 and 134 <= y <= 143:
-            return 0.7
-        # 4-7
-        elif 4 <= x <= 6 and 18 <= y <= 26:
-            return 2.3
-        elif 4 <= x <= 5 and 27 <= y <= 34:
-            return 3.7
-        elif 4 <= x <= 5 and 35 <= y <= 45:
-            return 4.2
-        elif 6 <= x <= 7 and 35 <= y <= 45:
-            return 1.2
-        elif 5 <= x <= 6 and 46 <= y <= 70:
-            return 5.2
-        elif 6 <= x <= 7 and 71 <= y <= 96:
-            return 4.5
-        elif 4 <= x <= 5 and 97 <= y <= 107:
-            return 3.8
-        elif 6 <= x <= 7 and 97 <= y <= 107:
-            return 5.7
-        elif 4 <= x <= 5 and 108 <= y <= 118:
-            return 3.9
-        elif 6 <= x <= 7 and 108 <= y <= 118:
-            return 4.2
-        elif 4 <= x <= 5 and 119 <= y <= 128:
-            return 3.1
-        elif 6 <= x <= 7 and 119 <= y <= 128:
-            return 5.3
-        elif 4 <= x <= 6 and 129 <= y <= 134:
-            return 4.5
-        elif 5 <= x <= 7 and 135 <= y <= 143:
-            return 3.2
-            # 8- 11
-        elif 8 <= x <= 9 and 28 <= y <= 41:
-            return 3.2
-        elif 10 <= x <= 11 and 28 <= y <= 41:
-            return 3.6
-        elif 9 <= x <= 10 and 42 <= y <= 51:
-            return 2.3
-        elif 10 <= x <= 11 and 52 <= y <= 64:
-            return 3.5
-        elif 8 <= x <= 9 and 65 <= y <= 78:
-            return 2.4
-        elif 8 <= x <= 11 and 79 <= y <= 92:
-            return 1.8
-        elif 8 <= x <= 9 and 93 <= y <= 109:
-            return 2.7
-        elif 10 <= x <= 11 and 93 <= y <= 109:
-            return 3.3
-        elif 9 <= x <= 10 and 110 <= y <= 120:
-            return 0.4
-        elif 10 <= x <= 11 and 121 <= y <= 132:
-            return 1.1
-        elif 8 <= x <= 9 and 133 <= y <= 140:
-            return 3.2
-        elif 8 <= x <= 11 and 141 <= y <= 143:
-            return 4.4
+                posX += 1
         else:
-            return 1
-    elif 13 <= hora <= 18:
-        # x = 0 , 3
-        if 1 <= x <= 2 and 5 <= y <= 20:
-            return 5.2
-        elif 2 <= x <= 3 and 21 <= y <= 35:
-            return 4.1
-        elif 0 <= x <= 3 and 36 <= y <= 45:
-            return 3.8
-        elif 1 <= x <= 2 and 46 <= y <= 70:
-            return 4.4
-        elif 0 <= x <= 2 and 71 <= y <= 96:
-            return 2.5
-        elif 0 <= x <= 1 and 97 <= y <= 108:
-            return 1.3
-        elif 2 <= x <= 3 and 97 <= y <= 108:
-            return 3.2
-        elif 0 <= x <= 1 and 109 <= y <= 125:
-            return 1.9
-        elif 2 <= x <= 3 and 109 <= y <= 125:
-            return 5.1
-        elif 0 <= x <= 1 and 126 <= y <= 134:
-            return 3.4
-        elif 2 <= x <= 3 and 126 <= y <= 134:
-            return 4.6
-        elif 0 <= x <= 3 and 134 <= y <= 143:
-            return 4.8
-        # 4-7
-        elif 4 <= x <= 6 and 18 <= y <= 26:
-            return 5.4
-        elif 4 <= x <= 5 and 27 <= y <= 34:
-            return 3.4
-        elif 4 <= x <= 5 and 35 <= y <= 45:
-            return 3.6
-        elif 6 <= x <= 7 and 35 <= y <= 45:
-            return 3.1
-        elif 5 <= x <= 6 and 46 <= y <= 70:
-            return 5.7
-        elif 6 <= x <= 7 and 71 <= y <= 96:
-            return 4.2
-        elif 4 <= x <= 5 and 97 <= y <= 107:
-            return 4.1
-        elif 6 <= x <= 7 and 97 <= y <= 107:
-            return 4.8
-        elif 4 <= x <= 5 and 108 <= y <= 118:
-            return 5.5
-        elif 6 <= x <= 7 and 108 <= y <= 118:
-            return 3.8
-        elif 4 <= x <= 5 and 119 <= y <= 128:
-            return 2.4
-        elif 6 <= x <= 7 and 119 <= y <= 128:
-            return 3.1
-        elif 4 <= x <= 6 and 129 <= y <= 134:
-            return 4.4
-        elif 5 <= x <= 7 and 135 <= y <= 143:
-            return 5
-            # 8- 11
-        elif 8 <= x <= 9 and 28 <= y <= 41:
-            return 2.4
-        elif 10 <= x <= 11 and 28 <= y <= 41:
-            return 1.7
-        elif 9 <= x <= 10 and 42 <= y <= 51:
-            return 3.3
-        elif 10 <= x <= 11 and 52 <= y <= 64:
-            return 3.9
-        elif 8 <= x <= 9 and 65 <= y <= 78:
-            return 4.6
-        elif 8 <= x <= 11 and 79 <= y <= 92:
-            return 3.1
-        elif 8 <= x <= 9 and 93 <= y <= 109:
-            return 5.3
-        elif 10 <= x <= 11 and 93 <= y <= 109:
-            return 4.9
-        elif 9 <= x <= 10 and 110 <= y <= 120:
-            return 2.5
-        elif 10 <= x <= 11 and 121 <= y <= 132:
-            return 4
-        elif 8 <= x <= 9 and 133 <= y <= 140:
-            return 2.2
-        elif 8 <= x <= 11 and 141 <= y <= 143:
-            return 5.2
-        else:
-            return 1
-    elif 19 <= hora <= 24:
-        # x = 0 , 3
-        if 1 <= x <= 2 and 5 <= y <= 20:
-            return 1.1
-        elif 2 <= x <= 3 and 21 <= y <= 35:
-            return 2
-        elif 0 <= x <= 3 and 36 <= y <= 45:
-            return 1.7
-        elif 1 <= x <= 2 and 46 <= y <= 70:
-            return 2.3
-        elif 0 <= x <= 2 and 71 <= y <= 96:
-            return 0.4
-        elif 0 <= x <= 1 and 97 <= y <= 108:
-            return 3.2
-        elif 2 <= x <= 3 and 97 <= y <= 108:
-            return 1.8
-        elif 0 <= x <= 1 and 109 <= y <= 125:
-            return 0.4
-        elif 2 <= x <= 3 and 109 <= y <= 125:
-            return 2.8
-        elif 0 <= x <= 1 and 126 <= y <= 134:
-            return 2.9
-        elif 2 <= x <= 3 and 126 <= y <= 134:
-            return 4.9
-        elif 0 <= x <= 3 and 134 <= y <= 143:
-            return 5.3
-        # 4-7
-        elif 4 <= x <= 6 and 18 <= y <= 26:
-            return 4.6
-        elif 4 <= x <= 5 and 27 <= y <= 34:
-            return 3.8
-        elif 4 <= x <= 5 and 35 <= y <= 45:
-            return 4.9
-        elif 6 <= x <= 7 and 35 <= y <= 45:
-            return 5.1
-        elif 5 <= x <= 6 and 46 <= y <= 70:
-            return 3.8
-        elif 6 <= x <= 7 and 71 <= y <= 96:
-            return 5.8
-        elif 4 <= x <= 5 and 97 <= y <= 107:
-            return 2.9
-        elif 6 <= x <= 7 and 97 <= y <= 107:
-            return 3.7
-        elif 4 <= x <= 5 and 108 <= y <= 118:
-            return 4.8
-        elif 6 <= x <= 7 and 108 <= y <= 118:
-            return 2.9
-        elif 4 <= x <= 5 and 119 <= y <= 128:
-            return 3.9
-        elif 6 <= x <= 7 and 119 <= y <= 128:
-            return 4.7
-        elif 4 <= x <= 6 and 129 <= y <= 134:
-            return 5.6
-        elif 5 <= x <= 7 and 135 <= y <= 143:
-            return 7
-        # 8- 11
-        elif 8 <= x <= 9 and 28 <= y <= 41:
-            return 3.5
-        elif 10 <= x <= 11 and 28 <= y <= 41:
-            return 2.8
-        elif 9 <= x <= 10 and 42 <= y <= 51:
-            return 3.5
-        elif 10 <= x <= 11 and 52 <= y <= 64:
-            return 2.9
-        elif 8 <= x <= 9 and 65 <= y <= 78:
-            return 4.5
-        elif 8 <= x <= 11 and 79 <= y <= 92:
-            return 2.8
-        elif 8 <= x <= 9 and 93 <= y <= 109:
-            return 4.1
-        elif 10 <= x <= 11 and 93 <= y <= 109:
-            return 3.4
-        elif 9 <= x <= 10 and 110 <= y <= 120:
-            return 3.8
-        elif 10 <= x <= 11 and 121 <= y <= 132:
-            return 3.2
-        elif 8 <= x <= 9 and 133 <= y <= 140:
-            return 4.2
-        elif 8 <= x <= 11 and 141 <= y <= 143:
-            return 5.7
-        else:
-            return 1
+            break
+        matrixToList[posX][posY] = x
+        listToMatrix.append([posX, posY])
+
+    posX = -1
+    posY = 0
+
+    for x in range(n):
+
+        if posY < 144:
+            if posX == 11:
+                posY += 1
+                posX = 0
+            else:
+                posX += 1
+        if matrix[posX, posY] == 1:
+            if 12 > posX >= 0 and 144 > posY - 1 >= 0:
+                if matrix[posX, posY - 1] == 1:
+                    sublist.append((math.floor(matrixToList[posX, posY - 1]), 0))
+            if 12 > posX + 1 >= 0 and 144 > posY >= 0:
+                if matrix[posX + 1, posY] == 1:
+                    sublist.append((math.floor(matrixToList[posX + 1, posY]), 0))
+            if 12 > posX >= 0 and 144 > posY + 1 >= 0:
+                if matrix[posX, posY + 1] == 1:
+                    sublist.append((math.floor(matrixToList[posX, posY + 1]), 0))
+            if 12 > posX - 1 >= 0 and 144 > posY >= 0:
+                if matrix[posX - 1, posY] == 1:
+                    sublist.append((math.floor(matrixToList[posX - 1, posY]), 0))
+
+        coords = get_value_cordenada(listToMatrix[x][0], listToMatrix[x][1])
+        list.append([sublist, coords[0], coords[1]])
+        sublist = []
+
+    return (list)
 
 
-# Actividades de implementación de algoritmo de cálculo de peso de arista en función
-# de su longitud y factor de tráfico calculado.
-def get_peso_arista_segun_trafico(x, y):
-    trafico = get_value_trafico_actual(x, y)
-    if trafico == None:
-        return 0
-    return trafico
+def set_peso_por_hora(list, hora):
+    for i in range(len(list)):
+        for z in range(len(list[i][0])):
+            list[i][0][z] = [list[i][0][z][0], 0]
+
+    for i in range(len(list)):
+        for z in range(len(list[i][0])):
+            if z > 0:
+                if 6 <= hora <= 12:
+                    if list[i][0][z][1] == 0:
+                        number = list[i][0][z][0]
+                        for s in range(len(list[number][0])):
+                            if i == list[number][0][s][0]:
+                                list[i][0][z] = [list[i][0][z][0], randint(4, 8)]
+                                list[number][0][s] = [list[number][0][s][0], list[i][0][z][1]]
+                if 13 <= hora <= 18:
+                    if list[i][0][z][1] == 0:
+                        number = list[i][0][z][0]
+                        for s in range(len(list[number][0])):
+                            if i == list[number][0][s][0]:
+                                list[i][0][z] = [list[i][0][z][0], randint(5, 9)]
+                                list[number][0][s] = [list[number][0][s][0], list[i][0][z][1]]
+                if 19 <= hora <= 24:
+                    if list[i][0][z][1] == 0:
+                        number = list[i][0][z][0]
+                        for s in range(len(list[number][0])):
+                            if i == list[number][0][s][0]:
+                                list[i][0][z] = [list[i][0][z][0], randint(7, 10)]
+                                list[number][0][s] = [list[number][0][s][0], list[i][0][z][1]]
+                if 1 <= hora <= 5:
+                    if list[i][0][z][1] == 0:
+                        number = list[i][0][z][0]
+                        for s in range(len(list[number][0])):
+                            if i == list[number][0][s][0]:
+                                list[i][0][z] = [list[i][0][z][0], randint(1, 4)]
+                                list[number][0][s] = [list[number][0][s][0], list[i][0][z][1]]
 
 
-# Obtener el longitud segun coordenadas
-def get_value_longitud_trafico_segun_coordenadas(coord_1,coord_2):
+def get_value_longitud_trafico_segun_coordenadas(coord_1, coord_2, trafic):
     def haversine(lon1, lat1, lon2, lat2):
         lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
 
@@ -391,172 +149,110 @@ def get_value_longitud_trafico_segun_coordenadas(coord_1,coord_2):
         r = 6371
         return c * r
 
-    return  round(haversine(coord_1[0], coord_1[1], coord_2[0], coord_2[1]),6)
-
-def get_longitud_entre_aristas(x,y,x1,y1):
-    return  round(get_value_longitud_trafico_segun_coordenadas(get_value_cordenada(x,y), get_value_cordenada(x1,y1)) * get_peso_arista_segun_trafico(x, y),6)
+    return round(haversine(coord_1[1], coord_1[2], coord_2[1], coord_2[2]) * trafic, 6)
 
 
-# Actividades de implementación de algoritmos para actualizar pesos de aristas en
-# función a la hora del día.
-def update_peso_arista_segun_trafico(hora, nuevo):
-    hora = nuevo
+# Rutas Mas Corta
+def dijkstra(first, second, lista, type):
+    queue = [[first, 0, first]]
 
-
-#a. Actividades de implementación de algoritmos para calcular la ruta más corta y 2 rutas
-#alternativas
-
-#Rutas Mas Corta
-def dijkstra(x1,y1,x2,y2, type):
-    queue = []
-
-    queue.append([x1, y1])
-
-    fatherX = np.zeros([12, 144])
-    fatherY = np.zeros([12, 144])
-
-    visited = np.zeros([12, 144])
-    peso = np.zeros([12, 144])
-
-    xFather = x1
-    yFather = y1
-
+    visited = [0] * len(lista)
+    peso = [0] * len(lista)
+    father = [-1] * len(lista)
     while queue:
+        if type == "corto":
+            [actual, pesoActual, fatherActual] = get_menor_value_queue(queue)
+        elif type == "alter1":
+            [actual, pesoActual, fatherActual] = get_mayor_value_queue(queue)
+        elif type == "alter2":
+            [actual, pesoActual, fatherActual] = get_ultimo_value_queue(queue)
 
-        [x,y] = queue[len(queue)-1]
-        queue.remove([x,y])
+        if visited[actual] == 0 and len(lista[actual][0]) > 0:
+            visited[actual] = 1
+            peso[actual] = pesoActual
+            father[actual] = fatherActual
 
-        if visited[x,y] == 0 and matrix[x][y] == 1 and  x1 <= x <= x2 and y1 <= y <=y2:
-            visited[x,y] = 1
-
-            peso[x,y] = peso[xFather, yFather] + get_longitud_entre_aristas(x,y,xFather,yFather)
+            '''
             print(" ")
             print("------")
-            print("x,y:",x,y)
-            print("Padre: ",xFather,yFather)
-            print("peso acomulado: ", peso[x, y])
-            print("longitud(x,y): ", get_longitud_entre_aristas(x, y, xFather, yFather))
+            print("padre: ", father[actual])
+            print("vertice:", actual)
+            print("peso acomulado: ", peso[actual])
             print("------")
             print(" ")
+            '''
 
-            fatherX[x,y] = xFather
-            fatherY[x,y] = yFather
+            set_append_segun_peso_corto(visited, actual, queue, lista, peso)
+            if actual == second:
+                fA = second
+                listaFather = []
+                listaFather.insert(0, fA)
+                while fA != first:
+                    fA = father[fA]
+                    listaFather.insert(0, fA)
 
-            xFather = x
-            yFather = y
-            if type == "corto":
-                set_append_segun_peso_corto(queue, x, y)
-            elif type == "alterna1":
-                set_append_segun_peso_alterna_1(queue,x , y)
-            elif type == "alterna2":
-                set_append_segun_peso_alterna_2(queue, x, y)
-            if x == x2 and y == y2:
+                '''
+                print("")
+                for i in range(len(listaFather)):
+                    print(listaFather[i])
+                print("")
+                '''
+
+                return listaFather
                 break
 
 
-#ordernar segun sus pesos en el queue
-def set_append_segun_peso_corto(queue, x,y):
-    lista = []
-    if 12 > x >= 0 and 144 > y - 1 >= 0:
-        lista.append([x, y - 1, get_longitud_entre_aristas(x,y,x,y-1)])
-
-    if 12 > x + 1 >= 0 and 144 > y >= 0:
-        lista.append([x + 1, y, get_longitud_entre_aristas(x,y,x + 1,y)])
-
-    if 12 > x >= 0 and 144 > y + 1 >= 0:
-        lista.append([x, y + 1, get_longitud_entre_aristas(x,y,x, y + 1)])
-
-    if 12 > x - 1 >= 0 and 144 > y >= 0:
-        lista.append([x - 1, y, get_longitud_entre_aristas(x,y,x - 1, y)])
+# obtener el menor de la lista
+def get_menor_value_queue(queue):
+    value = []
+    menor = queue[0]
+    if len(queue) > 1:
+        for x in range(len(queue)):
+            if menor[1] > queue[x][1]:
+                menor = queue[x]
+    value = menor
+    queue.remove(menor)
+    return value
 
 
-    while len(lista) > 0:
-        menor = lista[0]
-        for x in range(len(lista)):
-            if menor[2] < lista[x][2]:
-                menor = lista[x]
-        queue.append([menor[0],menor[1]])
-        lista.remove(menor)
+def get_mayor_value_queue(queue):
+    value = []
+    mayor = queue[0]
+    if len(queue) > 1:
+        for x in range(len(queue)):
+            if mayor[1] < queue[x][1]:
+                mayor = queue[x]
+    value = mayor
+    queue.remove(mayor)
+    return value
 
 
-#alterna 1
-def set_append_segun_peso_alterna_1(queue, x,y):
-    lista = []
-    if 12 > x >= 0 and 144 > y - 1 >= 0:
-        lista.append([x, y - 1, get_longitud_entre_aristas(x,y,x,y-1)])
-
-    if 12 > x + 1 >= 0 and 144 > y >= 0:
-        lista.append([x + 1, y, get_longitud_entre_aristas(x,y,x + 1,y)])
-
-    if 12 > x >= 0 and 144 > y + 1 >= 0:
-        lista.append([x, y + 1, get_longitud_entre_aristas(x,y,x, y + 1)])
-
-    if 12 > x - 1 >= 0 and 144 > y >= 0:
-        lista.append([x - 1, y, get_longitud_entre_aristas(x,y,x - 1, y)])
+def get_ultimo_value_queue(queue):
+    ultimo = queue[len(queue) - 1]
+    value = ultimo
+    queue.remove(ultimo)
+    return value
 
 
-    while len(lista) > 0:
-        mayor = lista[0]
-        for x in range(len(lista)):
-            if mayor[2] > lista[x][2]:
-                mayor = lista[x]
-        queue.append([mayor[0],mayor[1]])
-        lista.remove(mayor)
+def set_append_segun_peso_corto(visited, actual, queue, lista, peso):
+    for i in range(len(lista[actual][0])):
+        if visited[lista[actual][0][i][0]] == 0:
+            queue.append([lista[actual][0][i][0],
+                          peso[actual] + get_value_longitud_trafico_segun_coordenadas(lista[actual],
+                                                                                      lista[lista[actual][0][i][0]],
+                                                                                      lista[actual][0][i][1]), actual])
 
 
-#alterna 2
-def set_append_segun_peso_alterna_2(queue, x,y):
-    if 12 > x - 1 >= 0 and 144 > y >= 0:
-        hq.heappush(queue,[x - 1, y])
-    if 12 > x + 1 >= 0 and 144 > y >= 0:
-        hq.heappush(queue,[x + 1, y])
-    if 12 > x >= 0 and 144 > y - 1 >= 0:
-        hq.heappush(queue,[x, y - 1])
-    if 12 > x >= 0 and 144 > y + 1 >= 0:
-        hq.heappush(queue,[x, y + 1])
+lista = transformToList()
+set_peso_por_hora(lista, 1)
+corto = dijkstra(1, 3, lista, "corto")
+alt1 = dijkstra(1, 3, lista, "alter1")
+alt2 = dijkstra(1, 3, lista, "alter2")
 
-
-# Ejemplos
-
-#print(get_longitud_entre_aristas(0,0,1,0))
-#print(get_longitud_entre_aristas(1,0,0,0))
-
-'''
-hora = 8
-
-#Camino mas corto
-dijkstra(1,44,8,73,"corto")
-
-#Camnio Alterno 1
-dijkstra(1,44,8,73,"alterna1")
-
-#Camino Alterno 2
-dijkstra(1,44,8,73,"alterna2")
-'''
-
-#Cambio de hora 4
-hora = 4
-
-#Camino mas corto
-dijkstra(1,20,10,142,"corto")
-
-#Camnio Alterno 1
-dijkstra(1,20,10,142,"alterna1")
-
-#Camino Alterno 2
-dijkstra(1,20,10,142,"alterna2")
-
-print("-------------- OTRA HORA --------")
-
-
-#Cambio de hora 4
-hora = 23
-
-#Camino mas corto
-dijkstra(1,20,10,142,"corto")
-
-#Camnio Alterno 1
-dijkstra(1,20,10,142,"alterna1")
-
-#Camino Alterno 2
-dijkstra(1,20,10,142,"alterna2")
+print(corto)
+print(alt1)
+print(alt2)
+# print(lista[math.floor(lista[0][0][1][0])], lista[0][0][0][0])
+# print(get_value_longitud_trafico_segun_coordenadas(lista[0], lista[math.floor(lista[0][0][0][0])], lista[0][0][0][1]))
+# for x in range(len(lista)):
+# print(lista[x])
