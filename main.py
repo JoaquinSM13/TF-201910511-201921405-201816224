@@ -258,11 +258,12 @@ def paths():
     response = {"bestpath": corto, "path1": alt1, "path2": alt2}
     return json.dumps(response)
 
-#print(corto)
+# print(corto)
 #print(alt1)
 #print(alt2)
 # print(lista)
 # print(lista[math.floor(lista[0][0][1][0])], lista[0][0][0][0])
 # print(get_value_longitud_trafico_segun_coordenadas(lista[0], lista[math.floor(lista[0][0][0][0])], lista[0][0][0][1]))
 # for x in range(len(lista)):
-# print(lista[x])
+#   print(lista[x])
+# :D
