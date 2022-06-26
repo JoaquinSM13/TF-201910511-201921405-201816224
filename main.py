@@ -3,6 +3,7 @@ from math import radians, sin, asin, sqrt, cos
 import numpy as np
 import heapq as hq
 from random import randint
+import json
 
 matrix = np.ones([12, 144])
 matrixToList = np.ones([12, 144])
@@ -249,9 +250,18 @@ corto = dijkstra(1, 3, lista, "corto")
 alt1 = dijkstra(1, 3, lista, "alter1")
 alt2 = dijkstra(1, 3, lista, "alter2")
 
-print(corto)
-print(alt1)
-print(alt2)
+def graph():
+    response = {"loc": lista}
+    return json.dumps(response)
+
+def paths():
+    response = {"bestpath": corto, "path1": alt1, "path2": alt2}
+    return json.dumps(response)
+
+#print(corto)
+#print(alt1)
+#print(alt2)
+# print(lista)
 # print(lista[math.floor(lista[0][0][1][0])], lista[0][0][0][0])
 # print(get_value_longitud_trafico_segun_coordenadas(lista[0], lista[math.floor(lista[0][0][0][0])], lista[0][0][0][1]))
 # for x in range(len(lista)):
