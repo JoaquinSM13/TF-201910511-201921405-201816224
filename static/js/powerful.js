@@ -18,9 +18,9 @@
 	};
 	const box    = {
 		width:   990,
-		height:  695,
+		height:  1500,
 		bwidth:  990 - margin.left - margin.right,
-	  bheight: 695 - margin.top - margin.bottom
+	  bheight: 1500 - margin.top - margin.bottom
 	};
 
 	// Canvas y elementos
