@@ -46,6 +46,7 @@ def get_value_cordenada(x, y):
             sumaTotal[1] = 13.942969 + (10 * y)
         else:
             sumaTotal[0] = round(sumaTotal[0] + 10*7.2, 6)
+
             sumaTotal[1] = round(sumaTotal[1], 6)
     return sumaTotal
 
@@ -245,6 +246,7 @@ def set_append_segun_peso_corto(visited, actual, queue, lista, peso):
 
 
 lista = transformToList()
+
 
 def coords():
     aux=[]
