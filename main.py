@@ -3,6 +3,7 @@ from math import radians, sin, asin, sqrt, cos
 import numpy as np
 import heapq as hq
 from random import randint
+import json
 
 matrix = np.ones([12, 144])
 matrixToList = np.ones([12, 144])
@@ -38,13 +39,14 @@ verifiedY = 0
 def get_value_cordenada(x, y):
     if sumaTotal[0] == 0 and sumaTotal[1] == 0:
         sumaTotal[0] = 40.831556
-        sumaTotal[1] = -73.942969
+        sumaTotal[1] = 13.942969
     else:
         if x == 0:
             sumaTotal[0] = 40.831556
-            sumaTotal[1] = -73.942969 - (0.000300 * y)
+            sumaTotal[1] = 13.942969 + (10 * y)
         else:
-            sumaTotal[0] = round(sumaTotal[0] - (1 * 0.0001111111 / 2), 6)
+            sumaTotal[0] = round(sumaTotal[0] + 10*7.2, 6)
+
             sumaTotal[1] = round(sumaTotal[1], 6)
     return sumaTotal
 
@@ -244,15 +246,42 @@ def set_append_segun_peso_corto(visited, actual, queue, lista, peso):
 
 
 lista = transformToList()
+
+
+def coords():
+    aux=[]
+    for i in lista:
+        aux.append((i[1],i[2]))
+    return aux
+
+def list():
+    aux=[]
+    for i in lista:
+        aux.append(i[0])
+    return aux
+
+coordGrafo=coords()
+lista2=list()
+
 set_peso_por_hora(lista, 1)
 corto = dijkstra(1, 3, lista, "corto")
 alt1 = dijkstra(1, 3, lista, "alter1")
 alt2 = dijkstra(1, 3, lista, "alter2")
 
-print(corto)
-print(alt1)
-print(alt2)
+def graph():
+    response = {"loc": coordGrafo, "g": lista2}
+    return json.dumps(response)
+
+def paths():
+    response = {"bestpath": corto, "path1": alt1, "path2": alt2}
+    return json.dumps(response)
+
+# print(corto)
+#print(alt1)
+#print(alt2)
+#print(graph())    
 # print(lista[math.floor(lista[0][0][1][0])], lista[0][0][0][0])
 # print(get_value_longitud_trafico_segun_coordenadas(lista[0], lista[math.floor(lista[0][0][0][0])], lista[0][0][0][1]))
 # for x in range(len(lista)):
-# print(lista[x])
+#   print(lista[x])
+# :D
