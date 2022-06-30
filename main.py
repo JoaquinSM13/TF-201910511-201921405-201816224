@@ -35,21 +35,18 @@ for i in range(133, 144):
 sumaTotal = [0, 0]
 verifiedY = 0
 
-
 def get_value_cordenada(x, y):
     if sumaTotal[0] == 0 and sumaTotal[1] == 0:
-        sumaTotal[0] = 40.831556
-        sumaTotal[1] = 13.942969
+        sumaTotal[0] = 4000.831556
+        sumaTotal[1] = 7300.942969
     else:
         if x == 0:
-            sumaTotal[0] = 40.831556
-            sumaTotal[1] = 13.942969 + (10 * y)
+            sumaTotal[0] = 4000.831556
+            sumaTotal[1] = 7300.942969 + (100.000300 * y)
         else:
-            sumaTotal[0] = round(sumaTotal[0] + 10*7.2, 6)
-
+            sumaTotal[0] = round(sumaTotal[0] + (1 * 870.0001111111 / 1.3), 6)
             sumaTotal[1] = round(sumaTotal[1], 6)
     return sumaTotal
-
 
 def transformToList():
     n = len(matrix) * len(matrix[0])
@@ -188,10 +185,10 @@ def dijkstra(first, second, lista, type):
             if actual == second:
                 fA = second
                 listaFather = []
-                listaFather.insert(0, fA)
+                listaFather.append(fA)
                 while fA != first:
                     fA = father[fA]
-                    listaFather.insert(0, fA)
+                    listaFather.append(fA)
 
                 '''
                 print("")
@@ -201,7 +198,6 @@ def dijkstra(first, second, lista, type):
                 '''
 
                 return listaFather
-                break
 
 
 # obtener el menor de la lista
@@ -263,20 +259,26 @@ def list():
 coordGrafo=coords()
 lista2=list()
 
+
+
 set_peso_por_hora(lista, 1)
 corto = dijkstra(1, 3, lista, "corto")
-alt1 = dijkstra(1, 3, lista, "alter1")
-alt2 = dijkstra(1, 3, lista, "alter2")
+#alt1 = dijkstra(1, 3, lista, "alter1")
+#alt2 = dijkstra(1, 3, lista, "alter2")
 
 def graph():
-    response = {"loc": coordGrafo, "g": lista2}
-    return json.dumps(response)
+    return json.dumps({"loc": coordGrafo, "g": lista2})
 
-def paths():
-    response = {"bestpath": corto, "path1": alt1, "path2": alt2}
-    return json.dumps(response)
+def paths(s, t):
+    bestpath = dijkstra(s, t, lista, "corto")
+    path1 = dijkstra(s, t, lista, "alter1")
+    path2 = dijkstra(s, t, lista, "alter2")
 
-# print(corto)
+    return json.dumps({"bestpath": bestpath, "path1": path1, "path2": path2})
+
+#print(coordGrafo[1000])
+print(coordGrafo[corto[2]])
+#print(corto)
 #print(alt1)
 #print(alt2)
 #print(graph())    
