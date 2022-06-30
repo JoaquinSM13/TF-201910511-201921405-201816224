@@ -4,14 +4,28 @@
 	box-sizing: inherit;
 }
 html {
+	background: rgb(38, 36, 36);
 	box-sizing: border-box;
 	font-size: 62.5%;
 }
 #box {
-	background: Gainsboro;
-	margin: 0 auto;
+	background: rgb(38, 36, 36);
+	margin: 40px 0;
 	width: 100%;
+	display: flex;
+	justify-content: center;
 }
+#title{
+	color: rgb(220, 20, 103);
+	margin: 50px;
+	text-align: center;
+}
+#coord-graph{
+	color: rgb(255, 255, 255);
+	font-size: 4rem;
+	text-align: center;
+}
+
 
 /* vim: set tabstop=2:softtabstop=2:shiftwidth=2:noexpandtab */
 

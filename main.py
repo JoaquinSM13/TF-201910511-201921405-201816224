@@ -262,7 +262,7 @@ lista2=list()
 
 
 set_peso_por_hora(lista, 1)
-corto = dijkstra(1, 3, lista, "corto")
+#corto = dijkstra(1, 3, lista, "corto")
 #alt1 = dijkstra(1, 3, lista, "alter1")
 #alt2 = dijkstra(1, 3, lista, "alter2")
 
@@ -277,7 +277,7 @@ def paths(s, t):
     return json.dumps({"bestpath": bestpath, "path1": path1, "path2": path2})
 
 #print(coordGrafo[1000])
-print(coordGrafo[corto[2]])
+#print(coordGrafo[corto[2]])
 #print(corto)
 #print(alt1)
 #print(alt2)

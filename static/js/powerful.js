@@ -10,6 +10,8 @@
 	const urlpaths = `paths/${s}/${t}`
 	const paths = await d3.json(urlpaths);
 	console.log("Toda la maldad del mundo", s, t)
+	document.getElementById("first-coord").innerHTML=s;
+	document.getElementById("last-coord").innerHTML=t;
 	// config
   
 	const margin = {
@@ -19,9 +21,9 @@
 	  left: 10
 	};
 	const box = {
-	  width: 1600,
+	  width: 768,
 	  height: 1500,
-	  bwidth: 1600 - margin.left - margin.right,
+	  bwidth: 768 - margin.left - margin.right,
 	  bheight: 1500 - margin.top - margin.bottom,
 	};
   
@@ -90,10 +92,10 @@
 	  render(points, color, 4)
 	  console.log("------")
 	}
-	dealWithPath(paths.bestpath, "darkgreen")
-	dealWithPath(paths.path1, "orange")
-	dealWithPath(paths.path2, "red")
-  
+	dealWithPath(paths.path2, "rgba(220, 20, 103, 1)")
+  	dealWithPath(paths.path1, "rgba(255, 213, 140, 1)")
+	dealWithPath(paths.bestpath, "rgba(29, 228, 103, 1)")
+	
 	ctx.fillStyle = "LimeGreen";
 	ctx.fillRect(x(graph.loc[s]) - 5, y(graph.loc[s]) - 5, 10, 10)
 	ctx.strokeStyle = "Green";
@@ -102,7 +104,7 @@
 	ctx.fillRect(x(graph.loc[t]) - 5, y(graph.loc[t]) - 5, 10, 10)
 	ctx.strokeStyle = "OrangeRed";
 	ctx.strokeRect(x(graph.loc[t]) - 5, y(graph.loc[t]) - 5, 10, 10)
-  
+	
 	// Funciones y eventos
   
 	// Empezamos
