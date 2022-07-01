@@ -12,10 +12,7 @@
 	console.log("Toda la maldad del mundo", s, t)
 	document.getElementById("first-coord").innerHTML=s;
 	document.getElementById("last-coord").innerHTML=t;
-<<<<<<< Updated upstream
-=======
 	document.getElementById("linkpath").href=`paths/${s}/${t}`
->>>>>>> Stashed changes
 	
 	// config
 	const width = document.querySelector("#box").clientWidth;
@@ -32,17 +29,11 @@
 	  left: 10
 	};
 	const box = {
-<<<<<<< Updated upstream
-    	width: width,
-    	height: width * h / w,
-	};
-=======
 		width: 768,
 		height: 1500,
 		bwidth: 768 - margin.left - margin.right,
 		bheight: 1500 - margin.top - margin.bottom,
   	};
->>>>>>> Stashed changes
   
 	// Canvas y elementos
   
@@ -111,21 +102,12 @@
 			break
 		}
 	  }
-<<<<<<< Updated upstream
-	  render(points, color, 4)
-	  console.log("------")
-	}
-	dealWithPath(paths.path2, "rgba(220, 20, 103, 1)")
-  	dealWithPath(paths.path1, "rgba(255, 213, 140, 1)")
-	dealWithPath(paths.bestpath, "rgba(29, 228, 103, 1)")
-=======
 	  render(points, d=>color, 4)
 	  console.log("------")
 	}
 	dealWithPath(paths.path2, "rgba(220, 20, 103, 1)")
   	dealWithPath(paths.path1, "rgba(115, 152, 200, 1)")
 	dealWithPath(paths.bestpath, "rgba(255, 255, 255, 1)")
->>>>>>> Stashed changes
 	
 	ctx.fillStyle = "LimeGreen";
 	ctx.fillRect(x(graph.loc[s]) - 5, y(graph.loc[s]) - 5, 10, 10)
@@ -142,8 +124,4 @@
   
   })();
   
-<<<<<<< Updated upstream
   /* vim: set tabstop=2:softtabstop=2:shiftwidth=2:noexpandtab */
-=======
-  /* vim: set tabstop=2:softtabstop=2:shiftwidth=2:noexpandtab */```
->>>>>>> Stashed changes

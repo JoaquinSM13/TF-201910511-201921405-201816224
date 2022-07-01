@@ -4,23 +4,6 @@
     box-sizing: inherit;
 }
 html {
-<<<<<<< Updated upstream
-	background: rgb(38, 36, 36);
-	box-sizing: border-box;
-	font-size: 62.5%;
-}
-#box {
-	background: rgb(38, 36, 36);
-	margin: 40px 0;
-	width: 100%;
-	display: flex;
-	justify-content: center;
-}
-#title{
-	color: rgb(220, 20, 103);
-	margin: 50px;
-	text-align: center;
-=======
     background: rgb(38, 36, 36);
     box-sizing: border-box;
     font-size: 62.5%;
@@ -41,14 +24,7 @@ html {
     color: rgb(255, 255, 255);
     font-size: 4rem;
     text-align: center;
->>>>>>> Stashed changes
 }
-#coord-graph{
-	color: rgb(255, 255, 255);
-	font-size: 4rem;
-	text-align: center;
-}
-
 
 .navbar{
     padding: 3rem 0;
