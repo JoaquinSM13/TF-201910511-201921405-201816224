@@ -1,7 +1,6 @@
 import math
 from math import radians, sin, asin, sqrt, cos
 import numpy as np
-import heapq as hq
 from random import randint
 import json
 
@@ -276,7 +275,7 @@ def paths(s, t):
 
     return json.dumps({"bestpath": bestpath, "path1": path1, "path2": path2})
 
-#print(coordGrafo[1000])
+#print(lista2)
 #print(coordGrafo[corto[2]])
 #print(corto)
 #print(alt1)

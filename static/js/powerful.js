@@ -12,8 +12,15 @@
 	console.log("Toda la maldad del mundo", s, t)
 	document.getElementById("first-coord").innerHTML=s;
 	document.getElementById("last-coord").innerHTML=t;
+	
 	// config
-  
+	const width = document.querySelector("#box").clientWidth;
+
+	const extentx = d3.extent(graph.loc, d => d[0]);
+	const extenty = d3.extent(graph.loc, d => d[1]);
+	const w = extentx[1] - extentx[0];
+	const h = extenty[1] - extenty[0];
+
 	const margin = {
 	  top: 10,
 	  right: 10,
@@ -21,10 +28,8 @@
 	  left: 10
 	};
 	const box = {
-	  width: 768,
-	  height: 1500,
-	  bwidth: 768 - margin.left - margin.right,
-	  bheight: 1500 - margin.top - margin.bottom,
+    	width: width,
+    	height: width * h / w,
 	};
   
 	// Canvas y elementos
@@ -37,45 +42,50 @@
 	ctx.canvas.width = box.width;
 	ctx.canvas.height = box.height;
   
-	const extentx = d3.extent(graph.loc, d => d[0]);
-	const extenty = d3.extent(graph.loc, d => d[1]);
-	const w = extentx[1] - extentx[0];
-	const h = extenty[1] - extenty[0];
-
-	let size = 0, xpro = 1, ypro = 1;
-	size = (w > h) ? (box.bwidth - margin.right) : (box.bheight - margin.bottom);
-	xpro = (w > h) ? 1 : (w / h);
-	ypro = (w > h) ? (h / w) : 1;
-  
 	scalex = d3.scaleLinear()
-	  .domain(extentx)
-	  .range([margin.left, size * xpro]);
-	scaley = d3.scaleLinear()
-	  .domain(extenty)
-	  .range([size * ypro, margin.top]);
+    .domain(extentx)
+    .range([margin.left, box.width - margin.right]);
+  scaley = d3.scaleLinear()
+    .domain(extenty)
+    .range([box.height - margin.top, margin.bottom]);
   
 	const [lon, lat] = [d => scalex(d[0]), d => scaley(d[1])];
 	const x = d => lon(d);
 	const y = d => lat(d);
   
 	function render(points, color, lw) {
-	  ctx.lineWidth = lw;
-	  ctx.beginPath();
-	  ctx.strokeStyle = color;
-	  for (const point of points) {
-		ctx.moveTo(x(point[0]), y(point[0]));
-		ctx.lineTo(x(point[1]), y(point[1]));
-	  }
-	  ctx.stroke();
+		ctx.lineWidth = lw;
+		ctx.lineCap = "round";
+		ctx.lineJoin = "round";
+		for (const point of points) {
+		  ctx.beginPath();
+		  ctx.strokeStyle = color(point);
+		  ctx.moveTo(x(point[0]), y(point[0]));
+		  ctx.lineTo(x(point[1]), y(point[1]));
+		  ctx.stroke();
+		}
 	}
-  
+  	/*
 	const edges = [];
 	for (const u in graph.g) {
 	  for (const [v, _] of graph.g[u]) {
 		edges.push([graph.loc[u], graph.loc[v]])
 	  }
+	}*/
+
+	const edges = [];
+	for (const u in graph.g) {
+	  for (const [v, w] of graph.g[u]) {
+		edges.push([graph.loc[u], graph.loc[v], w])
+	  }
 	}
-	render(edges, 'white', 2)
+	
+	const extentw = d3.extent(edges, d => d[2]);
+	const scalecolor = d3.scaleLinear()
+	  .domain(extentw)
+	  .range([100, 0]);
+	const color = d => `hsla(${scalecolor(d[2])}, 100%, 50%, 0.5)`
+	render(edges, color, 2)
 	
 	function dealWithPath(path, color) {
 	  points = []
