@@ -28,9 +28,10 @@ def graph():
     return app.response_class(response=main.graph(),
                               status=200,
                               mimetype='application/json')
-@app.route("/paths")
-def paths():
-    return app.response_class(response=main.paths(),
+    
+@app.route("/paths/<int:s>/<int:t>")
+def paths(s, t):
+    return app.response_class(response=main.paths(s, t),
                               status=200,
                               mimetype='application/json')
 
