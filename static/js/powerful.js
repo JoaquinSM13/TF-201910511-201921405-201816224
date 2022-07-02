@@ -119,6 +119,7 @@
 	ctx.strokeRect(x(graph.loc[t]) - 5, y(graph.loc[t]) - 5, 10, 10)
 	
 	// Funciones y eventos
+	// :D
   
 	// Empezamos
   

@@ -3,14 +3,13 @@ from math import radians, sin, asin, sqrt, cos
 import numpy as np
 from random import randint
 import json
+#from perlin_noise import PerlinNoise
 
 matrix = np.ones([12, 144])
 matrixToList = np.ones([12, 144])
 listToMatrix = []
 hora = 0
-
 lista = []
-
 
 def removeEdgeMatrix(firstVertice, secondVertice):
     matrix[firstVertice][secondVertice] = 0
@@ -53,7 +52,11 @@ def transformToList():
     list = []
     posX = -1
     posY = 0
-
+    
+    #noise = PerlinNoise(octaves=5, seed = 1981)
+    #xpix, ypix = 144,12
+    #pic = [[noise([i/xpix, j/ypix]) for j in range(xpix)] for i in range(ypix)]
+    
     for x in range(n):
         if posY < 144:
             if posX == 11:
@@ -65,7 +68,6 @@ def transformToList():
             break
         matrixToList[posX][posY] = x
         listToMatrix.append([posX, posY])
-
     posX = -1
     posY = 0
 
@@ -92,6 +94,7 @@ def transformToList():
                     sublist.append((math.floor(matrixToList[posX - 1, posY]), 0))
 
         coords = get_value_cordenada(listToMatrix[x][0], listToMatrix[x][1])
+        #list.append([sublist, coords[0], coords[1],pic[posX][posY]*10])
         list.append([sublist, coords[0], coords[1]])
         sublist = []
 
@@ -169,7 +172,6 @@ def dijkstra(first, second, lista, type):
             visited[actual] = 1
             peso[actual] = pesoActual
             father[actual] = fatherActual
-
             '''
             print(" ")
             print("------")
@@ -179,8 +181,7 @@ def dijkstra(first, second, lista, type):
             print("------")
             print(" ")
             '''
-
-            set_append_segun_peso_corto(visited, actual, queue, lista, peso)
+            set_append_segun_peso(visited, actual, queue, lista, peso)
             if actual == second:
                 fA = second
                 listaFather = []
@@ -223,15 +224,13 @@ def get_mayor_value_queue(queue):
     queue.remove(mayor)
     return value
 
-
 def get_ultimo_value_queue(queue):
-    ultimo = queue[len(queue) - 1]
+    ultimo = queue[0]
     value = ultimo
     queue.remove(ultimo)
     return value
 
-
-def set_append_segun_peso_corto(visited, actual, queue, lista, peso):
+def set_append_segun_peso(visited, actual, queue, lista, peso):
     for i in range(len(lista[actual][0])):
         if visited[lista[actual][0][i][0]] == 0:
             queue.append([lista[actual][0][i][0],
@@ -239,9 +238,7 @@ def set_append_segun_peso_corto(visited, actual, queue, lista, peso):
                                                                                       lista[lista[actual][0][i][0]],
                                                                                       lista[actual][0][i][1]), actual])
 
-
 lista = transformToList()
-
 
 def coords():
     aux=[]
@@ -258,12 +255,7 @@ def list():
 coordGrafo=coords()
 lista2=list()
 
-
-
 set_peso_por_hora(lista, 1)
-#corto = dijkstra(1, 3, lista, "corto")
-#alt1 = dijkstra(1, 3, lista, "alter1")
-#alt2 = dijkstra(1, 3, lista, "alter2")
 
 def graph():
     return json.dumps({"loc": coordGrafo, "g": lista2})
@@ -275,14 +267,4 @@ def paths(s, t):
 
     return json.dumps({"bestpath": bestpath, "path1": path1, "path2": path2})
 
-#print(lista2)
-#print(coordGrafo[corto[2]])
-#print(corto)
-#print(alt1)
-#print(alt2)
-#print(graph())    
-# print(lista[math.floor(lista[0][0][1][0])], lista[0][0][0][0])
-# print(get_value_longitud_trafico_segun_coordenadas(lista[0], lista[math.floor(lista[0][0][0][0])], lista[0][0][0][1]))
-# for x in range(len(lista)):
-#   print(lista[x])
 # :D
